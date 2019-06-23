@@ -43,9 +43,11 @@ void loop() {
   Serial.println();
   
   
-  digitalWrite(reg_clk, real_read);
   digitalWrite(dataA, to_writeA);
+  delayMicroseconds(1 + random(0, 100));
   digitalWrite(dataB, to_writeB);
+  delayMicroseconds(1 + random(0, 100));
+  digitalWrite(reg_clk, real_read);
   delayMicroseconds(1 + random(0, 100));
   
   if(real_read) {
