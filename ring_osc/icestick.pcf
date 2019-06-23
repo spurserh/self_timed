@@ -13,6 +13,8 @@ set_io arduino11 60
 set_io arduino12 61
 set_io arduino13 62  # UNO LED!
 
+set_io auxOut 112
+
 set_io LED1 99
 set_io LED2 98
 set_io LED3 97
