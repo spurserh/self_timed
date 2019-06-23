@@ -17,7 +17,7 @@ void loop() {
   static unsigned lastA = 0;
   static unsigned lastB = 0;
   
-  delayMicroseconds(100);
+  delayMicroseconds(1 + random(0, 100));
 
   unsigned did_read = digitalRead(feedback) ? 1 : 0;
 
@@ -46,7 +46,7 @@ void loop() {
   digitalWrite(reg_clk, real_read);
   digitalWrite(dataA, to_writeA);
   digitalWrite(dataB, to_writeB);
-  delayMicroseconds(100);
+  delayMicroseconds(1 + random(0, 100));
   
   if(real_read) {
     lastA = to_writeA;
@@ -65,5 +65,5 @@ void loop() {
   digitalWrite(reg_clk, 0);
   delayMicroseconds(100);
 
-  delay(50);
+  delay(10);
 }
