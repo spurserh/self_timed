@@ -1,0 +1,23 @@
+# full iCEstick pinout:
+# http://www.pighixxx.com/test/portfolio-items/icestick/
+
+set_io --warn-no-port RX 9
+set_io --warn-no-port TX 8
+
+set_io arduino6  44
+set_io arduino7  45
+set_io arduino8  47
+set_io arduino9  48
+set_io arduino10 56
+set_io arduino11 60
+set_io arduino12 61
+set_io arduino13 62  # UNO LED!
+
+set_io auxOut 112
+
+set_io LED1 99
+set_io LED2 98
+set_io LED3 97
+set_io LED4 96
+set_io LED5 95
+set_io clk 21

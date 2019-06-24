@@ -26,7 +26,7 @@ module ring_oscillator(input enable, output chain_out);
 	assign chain_in = enable ? !chain_out : 0;
 
 	SB_LUT4 #(
-		.LUT_INIT(16'd2)
+		.LUT_INIT(16'd10)
 	) buffer (
 		.O(chain_out),
 		.I0(chain_in),

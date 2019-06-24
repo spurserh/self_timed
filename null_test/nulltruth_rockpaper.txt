@@ -1,0 +1,50 @@
+
+Two kinds of null: ready and done null
+
+Ready null is 0,0
+Done null is 1,1
+
+If one input is ready null, and one done null, done null wins
+If one input is data, and the other is ready null, output is ready null
+If one input is data, and the other is done null, dummy data or ready null out
+Only if both inputs are done null is the output done null
+
+
+X0 X1  Y0 Y1  O0
+0  0   0  0   0   // ready null + ready null = ready null
+0  0   0  1   0   // ready null dominates data
+0  0   1  0   0   // ready null dominates data
+0  0   1  1   1   // done null dominates ready null
+0  1   0  0   0   // ready null dominates data
+0  1   0  1   1   // 1 AND 1 = 1
+0  1   1  0   0   // 1 AND 0 = 0
+0  1   1  1   0   // data + done null = ready null out (dominated by done null)
+1  0   0  0   0   // ready null dominates data
+1  0   0  1   0   // 0 AND 1 = 0
+1  0   1  0   0   // 0 AND 0 = 0
+1  0   1  1   0   // data + done null = ready null out (dominated by done null)
+1  1   0  0   1   // done null dominates ready null
+1  1   0  1   0   // data + done null = ready null out (dominated by done null)
+1  1   1  0   0   // data + done null = ready null out (dominated by done null)
+1  1   1  1   1   // ready null + ready null = ready null
+
+
+X0 X1  Y0 Y1  O1
+0  0   0  0   0   // ready null + ready null = ready null
+0  0   0  1   0   // ready null dominates data
+0  0   1  0   0   // ready null dominates data
+0  0   1  1   1   // done null dominates ready null
+0  1   0  0   0   // ready null dominates data
+0  1   0  1   0   // 1 NAND 1 = 1
+0  1   1  0   1   // 1 NAND 0 = 0
+0  1   1  1   0   // data + done null = ready null out (dominated by done null)
+1  0   0  0   0   // ready null dominates data
+1  0   0  1   1   // 0 NAND 1 = 0
+1  0   1  0   1   // 0 NAND 0 = 0
+1  0   1  1   0   // data + done null = ready null out (dominated by done null)
+1  1   0  0   1   // done null dominates ready null
+1  1   0  1   0   // data + done null = ready null out (dominated by done null)
+1  1   1  0   0   // data + done null = ready null out (dominated by done null)
+1  1   1  1   1   // ready null + ready null = ready null
+
+
