@@ -20,10 +20,11 @@ module top (
 	assign auxOut = counter[4];
 endmodule
 
-// >200Mhz!
+// >200Mhz! (without enable)
 module ring_oscillator(input enable, output chain_out);
 	wire chain_in;
-	assign chain_in = enable ? !chain_out : 0;
+//	assign chain_in = enable ? !chain_out : 0;
+	assign chain_in = !chain_out;
 
 	SB_LUT4 #(
 		.LUT_INIT(16'd10)

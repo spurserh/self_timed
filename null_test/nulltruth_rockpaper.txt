@@ -10,24 +10,7 @@ If one input is data, and the other is done null, dummy data or ready null out
 Only if both inputs are done null is the output done null
 
 
-X0 X1  Y0 Y1  O0
-0  0   0  0   0   // ready null + ready null = ready null
-0  0   0  1   0   // ready null dominates data
-0  0   1  0   0   // ready null dominates data
-0  0   1  1   1   // done null dominates ready null
-0  1   0  0   0   // ready null dominates data
-0  1   0  1   1   // 1 AND 1 = 1
-0  1   1  0   0   // 1 AND 0 = 0
-0  1   1  1   0   // data + done null = ready null out (dominated by done null)
-1  0   0  0   0   // ready null dominates data
-1  0   0  1   0   // 0 AND 1 = 0
-1  0   1  0   0   // 0 AND 0 = 0
-1  0   1  1   0   // data + done null = ready null out (dominated by done null)
-1  1   0  0   1   // done null dominates ready null
-1  1   0  1   0   // data + done null = ready null out (dominated by done null)
-1  1   1  0   0   // data + done null = ready null out (dominated by done null)
-1  1   1  1   1   // ready null + ready null = ready null
-
+NAND
 
 X0 X1  Y0 Y1  O1
 0  0   0  0   0   // ready null + ready null = ready null
@@ -47,4 +30,104 @@ X0 X1  Y0 Y1  O1
 1  1   1  0   0   // data + done null = ready null out (dominated by done null)
 1  1   1  1   1   // ready null + ready null = ready null
 
+
+X0 X1  Y0 Y1  O0
+0  0   0  0   0   // ready null + ready null = ready null
+0  0   0  1   0   // ready null dominates data
+0  0   1  0   0   // ready null dominates data
+0  0   1  1   1   // done null dominates ready null
+0  1   0  0   0   // ready null dominates data
+0  1   0  1   1   // 1 AND 1 = 1
+0  1   1  0   0   // 1 AND 0 = 0
+0  1   1  1   0   // data + done null = ready null out (dominated by done null)
+1  0   0  0   0   // ready null dominates data
+1  0   0  1   0   // 0 AND 1 = 0
+1  0   1  0   0   // 0 AND 0 = 0
+1  0   1  1   0   // data + done null = ready null out (dominated by done null)
+1  1   0  0   1   // done null dominates ready null
+1  1   0  1   0   // data + done null = ready null out (dominated by done null)
+1  1   1  0   0   // data + done null = ready null out (dominated by done null)
+1  1   1  1   1   // ready null + ready null = ready null
+
+
+
+OR
+
+X0 X1  Y0 Y1  O1
+0  0   0  0   0   // ready null + ready null = ready null
+0  0   0  1   0   // ready null dominates data
+0  0   1  0   0   // ready null dominates data
+0  0   1  1   1   // done null dominates ready null
+0  1   0  0   0   // ready null dominates data
+0  1   0  1   1   // 1 OR 1
+0  1   1  0   1   // 1 OR 0
+0  1   1  1   0   // data + done null = ready null out (dominated by done null)
+1  0   0  0   0   // ready null dominates data
+1  0   0  1   1   // 0 OR 1
+1  0   1  0   0   // 0 OR 0
+1  0   1  1   0   // data + done null = ready null out (dominated by done null)
+1  1   0  0   1   // done null dominates ready null
+1  1   0  1   0   // data + done null = ready null out (dominated by done null)
+1  1   1  0   0   // data + done null = ready null out (dominated by done null)
+1  1   1  1   1   // ready null + ready null = ready null
+
+
+X0 X1  Y0 Y1  O0
+0  0   0  0   0   // ready null + ready null = ready null
+0  0   0  1   0   // ready null dominates data
+0  0   1  0   0   // ready null dominates data
+0  0   1  1   1   // done null dominates ready null
+0  1   0  0   0   // ready null dominates data
+0  1   0  1   0   // 1 NOR 1
+0  1   1  0   0   // 1 NOR 0
+0  1   1  1   0   // data + done null = ready null out (dominated by done null)
+1  0   0  0   0   // ready null dominates data
+1  0   0  1   0   // 0 NOR 1
+1  0   1  0   1   // 0 NOR 0
+1  0   1  1   0   // data + done null = ready null out (dominated by done null)
+1  1   0  0   1   // done null dominates ready null
+1  1   0  1   0   // data + done null = ready null out (dominated by done null)
+1  1   1  0   0   // data + done null = ready null out (dominated by done null)
+1  1   1  1   1   // ready null + ready null = ready null
+
+
+
+XOR
+
+X0 X1  Y0 Y1  O1
+0  0   0  0   0   // ready null + ready null = ready null
+0  0   0  1   0   // ready null dominates data
+0  0   1  0   0   // ready null dominates data
+0  0   1  1   1   // done null dominates ready null
+0  1   0  0   0   // ready null dominates data
+0  1   0  1   0   // 1 XOR 1
+0  1   1  0   1   // 1 XOR 0
+0  1   1  1   0   // data + done null = ready null out (dominated by done null)
+1  0   0  0   0   // ready null dominates data
+1  0   0  1   1   // 0 XOR 1
+1  0   1  0   0   // 0 XOR 0
+1  0   1  1   0   // data + done null = ready null out (dominated by done null)
+1  1   0  0   1   // done null dominates ready null
+1  1   0  1   0   // data + done null = ready null out (dominated by done null)
+1  1   1  0   0   // data + done null = ready null out (dominated by done null)
+1  1   1  1   1   // ready null + ready null = ready null
+
+
+X0 X1  Y0 Y1  O0
+0  0   0  0   0   // ready null + ready null = ready null
+0  0   0  1   0   // ready null dominates data
+0  0   1  0   0   // ready null dominates data
+0  0   1  1   1   // done null dominates ready null
+0  1   0  0   0   // ready null dominates data
+0  1   0  1   1   // 1 NXOR 1
+0  1   1  0   0   // 1 NXOR 0
+0  1   1  1   0   // data + done null = ready null out (dominated by done null)
+1  0   0  0   0   // ready null dominates data
+1  0   0  1   0   // 0 NXOR 1
+1  0   1  0   1   // 0 NXOR 0
+1  0   1  1   0   // data + done null = ready null out (dominated by done null)
+1  1   0  0   1   // done null dominates ready null
+1  1   0  1   0   // data + done null = ready null out (dominated by done null)
+1  1   1  0   0   // data + done null = ready null out (dominated by done null)
+1  1   1  1   1   // ready null + ready null = ready null
 
