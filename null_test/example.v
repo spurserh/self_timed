@@ -29,7 +29,6 @@ module nand_null(input x0, input x1,
 				 output o0, output o1);
 
 	SB_LUT4 #(
-//		.LUT_INIT(16'b0001010000001001)
 		.LUT_INIT(16'b1001000000101000)
 	) out0 (
 		.O(o0),
@@ -40,7 +39,6 @@ module nand_null(input x0, input x1,
 	);
 
 	SB_LUT4 #(
-//		.LUT_INIT(16'b0001001001101001)
 		.LUT_INIT(16'b1001011001001000)
 	) out1 (
 		.O(o1),

@@ -46,5 +46,49 @@ void loop() {
   Serial.print(",");
   Serial.print(o1);
   Serial.println();
+
+  const bool x_ready_null = (x0 == 0) && (x1 == 0);
+  const bool x_done_null = (x0 == 1) && (x1 == 1);
+  const bool y_ready_null = (y0 == 0) && (y1 == 0);
+  const bool y_done_null = (y0 == 1) && (y1 == 1);
+  
+  const bool x_null = x_ready_null || x_done_null;
+  const bool y_null = y_ready_null || y_done_null;
+
+  // Default ready null
+  unsigned ref_o0 = 0, ref_o1 = 0;
+
+  if(x_null || y_null) {
+    if(x_ready_null && y_ready_null) {
+      ref_o0 = ref_o1 = 0;
+    } else if((x_ready_null && y_done_null) || (y_ready_null && x_done_null)) {
+      ref_o0 = ref_o1 = 1;
+    } else if (x_done_null && y_done_null) {
+      ref_o0 = ref_o1 = 1;
+    } else if (x_done_null || y_done_null) {
+      // data + done null = ready null out
+      ref_o0 = ref_o1 = 0;
+    } else if (x_ready_null || y_ready_null) {
+      // data + ready null = ready null out
+      ref_o0 = ref_o1 = 0;
+    }
+  } else {
+    if(x1 && y1) {
+      ref_o0 = 1;
+      ref_o1 = 0;
+    } else {
+      ref_o0 = 0;
+      ref_o1 = 1;
+    }
+  }
+
+  if((o0 != ref_o0) || (o1 != ref_o1)) {
+    Serial.print("  Mismatched ref ");
+    Serial.print(ref_o0);
+    Serial.print(",");
+    Serial.print(ref_o1);
+    Serial.println();
+  }
+  
   delay(100);
 }
