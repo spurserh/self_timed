@@ -413,17 +413,21 @@ void loop() {
     if(decoded < last) {
       Serial.print("Counter roll-over in ");
       unsigned long long now = micros();
-      Serial.println((unsigned long)(now - last_micros));
+      unsigned long duration_micros = now - last_micros;
+      Serial.print(duration_micros);
+      Serial.print(" est ");
+      Serial.print(float(1L<<24) / (float(duration_micros)));
+      Serial.println(" Mhz");
       last_micros = now;
     }
     last = decoded;
   }
-
+#if 0
   if((flags & 0b11) == 0b10) {
     Serial.print(" dec ");
     Serial.print(decoded);
     Serial.println();
   }
-  
   delay(5);
+#endif
 }

@@ -368,11 +368,38 @@ module inc_test(input [(IN_BITS-1):0] inputs,
 		.c_out(c22)
 	);
 
+	wire [1:0] from_buffer;
+	wire [1:0] direct;
+
+	// Speed adjustment
+	localparam HIGH_SPEED = 1;
+	assign outputs[47:46] = HIGH_SPEED ? direct : from_buffer;
+
+	SB_LUT4 #(
+		.LUT_INIT(16'd10)
+	) buffer1 (
+		.O(from_buffer[0]),
+		.I0(direct[0]),
+		.I1(1'b0),
+		.I2(1'b0),
+		.I3(1'b0)
+	);
+	SB_LUT4 #(
+		.LUT_INIT(16'd10)
+	) buffer2 (
+		.O(from_buffer[1]),
+		.I0(direct[1]),
+		.I1(1'b0),
+		.I2(1'b0),
+		.I3(1'b0)
+	);
+
+
 	wire [1:0] c23;
 	carry_null inc23(
 		.a(inputs[47:46]),
 		.c_in(c22),
-		.s(outputs[47:46]),
+		.s(direct),
 		.c_out(c23)
 	);
 endmodule
