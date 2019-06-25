@@ -74,6 +74,7 @@ module top (
 		end
 	end
 
+	// TODO: Remove clock buffer
 	always @(posedge data_is_ready)
 	begin
 		last_vals <= outputs;
