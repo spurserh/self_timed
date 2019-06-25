@@ -9,6 +9,22 @@ If one input is data, and the other is ready null, output is ready null
 If one input is data, and the other is done null, dummy data or ready null out
 Only if both inputs are done null is the output done null
 
+Process, starting with all ready null:
+
+- Apply data to inputs
+- Wait for all data outputs
+- Apply done null to inputs
+- Wait for all done null outputs
+- Apply ready null to inputs
+- Wait for all ready null outputs
+- Repeat
+
+From unknown state:
+
+- Apply done null to inputs
+- Wait for all done null outputs
+- Apply ready null to inputs
+- Wait for all ready null outputs
 
 NAND
 

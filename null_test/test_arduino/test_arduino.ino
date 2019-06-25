@@ -7,6 +7,8 @@ const int out_clk = 9;
 const int out_data = 10;
 const int out_rst = 11;
 
+const int complete = 12;
+
 void setup() {
   pinMode(in_clk, OUTPUT);
   pinMode(in_data, OUTPUT);
@@ -14,6 +16,7 @@ void setup() {
   pinMode(out_clk, OUTPUT);
   pinMode(out_rst, OUTPUT);
   pinMode(out_data, INPUT);
+  pinMode(complete, INPUT);
 
   digitalWrite(in_rst, LOW);
   digitalWrite(in_clk, LOW);
@@ -34,8 +37,8 @@ void write_word(unsigned long w, unsigned n) {
   }
 }
 
-unsigned long read_word(unsigned n) {
-  unsigned long w = 0;
+unsigned long long read_word(unsigned n) {
+  unsigned long long w = 0;
   
   digitalWrite(out_rst, HIGH);
   digitalWrite(out_clk, HIGH);
@@ -44,7 +47,7 @@ unsigned long read_word(unsigned n) {
 
   for(unsigned i=0;i<n;++i) {
     if(digitalRead(out_data) == HIGH)
-      w |= (1L << i);
+      w |= (1LL << i);
     digitalWrite(out_clk, HIGH);
     digitalWrite(out_clk, LOW);
   }
@@ -183,16 +186,13 @@ void test_full_adder() {
     in_word &= 0b00;
     out_word = 0;
   }
-  
+
   write_word(in_word, n_input_bits);
 
-  // TODO: Wait for null completion
-  delay(1);
+//  while(digitalRead(complete) == LOW);
 
   unsigned long rval = read_word(n_output_bits);
 
-
-    
   if(rval != out_word) 
   {
     Serial.print("Mismatch! ");
@@ -214,9 +214,216 @@ void test_full_adder() {
   }
 }
 
-void loop() {
-  test_full_adder();
-//  gates_test();
+void test_inc() {
+  const int n_input_bits = 2;
+  const int n_output_bits = 4;
 
-  delay(50);
+  unsigned a = random(0,2);
+
+  unsigned ref_s = a + 1;
+  unsigned ref_c = 0;
+
+  if(ref_s == 2) {
+    ref_s = 0;
+    ref_c = 1;
+  } else if(ref_s == 3) {
+    ref_s = 1;
+    ref_c = 1;
+  }
+
+  unsigned long in_word = ((a ? 0b10L : 0b01L) << 0L);
+
+  unsigned long out_word = ((ref_s ? 0b10L : 0b01L) << 0L) |
+                           ((ref_c ? 0b10L : 0b01L) << 2L);
+
+  if(random(0, 4) == 0) {
+    in_word |= 0b111111L;
+    out_word |= 0b1111L;
+  } else if(random(0, 4) == 0) {
+    in_word &= 0b00;
+    out_word = 0;
+  }
+
+  write_word(in_word, n_input_bits);
+
+//  while(digitalRead(complete) == LOW);
+
+  unsigned long rval = read_word(n_output_bits);
+
+  if(rval != out_word) 
+  {
+    Serial.print("Mismatch! ");
+  }
+  {
+    Serial.print(" a ");
+    Serial.print(a);
+    Serial.print(" in ");
+    Serial.print(in_word, BIN);
+    Serial.print(" ref ");
+    Serial.print(out_word, BIN);
+    Serial.print(" rval ");
+    Serial.print(rval, BIN);
+    Serial.println();
+  }
+}
+
+
+void test_carry() {
+  const int n_input_bits = 4;
+  const int n_output_bits = 4;
+
+  unsigned a = random(0,2);
+  unsigned c = random(0,2);
+
+  unsigned ref_s = a + c;
+  unsigned ref_c = 0;
+
+  if(ref_s == 2) {
+    ref_s = 0;
+    ref_c = 1;
+  } else if(ref_s == 3) {
+    ref_s = 1;
+    ref_c = 1;
+  }
+
+  unsigned long in_word = ((a ? 0b10L : 0b01L) << 0L) |
+                          ((c ? 0b10L : 0b01L) << 2L);
+
+  unsigned long out_word = ((ref_s ? 0b10L : 0b01L) << 0L) |
+                           ((ref_c ? 0b10L : 0b01L) << 2L);
+/*
+  if(random(0, 4) == 0) {
+    in_word |= 0b111111L;
+    out_word |= 0b1111L;
+  } else if(random(0, 4) == 0) {
+    in_word &= 0b00;
+    out_word = 0;
+  }*/
+
+  write_word(in_word, n_input_bits);
+
+//  while(digitalRead(complete) == LOW);
+
+  unsigned long rval = read_word(n_output_bits);
+
+  if(rval != out_word) 
+  {
+    Serial.print("Mismatch! ");
+  }
+  {
+    Serial.print(" a ");
+    Serial.print(a);
+    Serial.print(" c ");
+    Serial.print(c);
+    Serial.print(" in ");
+    Serial.print(in_word, BIN);
+    Serial.print(" ref ");
+    Serial.print(out_word, BIN);
+    Serial.print(" rval ");
+    Serial.print(rval, BIN);
+    Serial.println();
+  }
+}
+
+
+void test_full_inc() {
+  const int n_input_bits = 32;
+  const int n_output_bits = 32;
+
+  unsigned long a = random(0, 65536L);
+  unsigned long a_ = a+1;
+
+  unsigned long in_word = 0;
+  unsigned long out_word = 0;
+
+  for(int i=0;i<n_input_bits/2;++i) {
+    in_word |= ((a & (1L << i)) ? 0b10L : 0b01L) << (i*2);
+    out_word |= ((a_ & (1L << i)) ? 0b10L : 0b01L) << (i*2);
+  }
+
+  write_word(in_word, n_input_bits);
+
+  delay(1);
+
+  unsigned long rval = read_word(n_output_bits);
+
+  unsigned long decoded = 0;
+  for(int i=0;i<n_output_bits/2;++i) {
+    if(rval & (1L << ((2*i)+1))) {
+      decoded |= (1L << i);
+    }
+  }
+
+  if(rval != out_word) 
+  {
+    Serial.print("Mismatch! ");
+  }
+  {
+    Serial.print(" a ");
+    Serial.print(a);
+    Serial.print(" in ");
+    Serial.print(in_word, BIN);
+    Serial.print(" ref ");
+    Serial.print(out_word, BIN);
+    Serial.print(" rval ");
+    Serial.print(rval, BIN);
+    Serial.print(" dec ");
+    Serial.print(decoded);
+    Serial.println();
+  }
+}
+
+void loop() {
+//  test_full_adder();
+//  gates_test();
+//  test_inc();
+//  test_carry();
+//  test_full_inc();
+
+  const int n_output_bits = 53;
+  unsigned long long rval = read_word(n_output_bits);
+
+  unsigned long flags = (unsigned long)(rval >> 48LL);
+
+  unsigned long decoded = 0;
+  for(int i=0;i<24;++i) {
+    if(rval & (1LL << ((2*i)+1))) {
+      decoded |= (1LL << i);
+    }
+  }
+#if 0
+  if((flags & 0b11) == 0b10)
+    Serial.print("work phase ");
+  else if((flags & 0b11) == 0b01)
+    Serial.print("high null phase ");
+  else
+    Serial.print("low null phase ");
+  
+  Serial.print(flags >> 2LL, BIN);
+  Serial.print(" ");
+  Serial.print((unsigned long)((rval >> 32LL) & 0b1111111111111111LL), BIN);
+  Serial.print((unsigned long)(rval & 0b11111111111111111111111111111111LL), BIN);
+  Serial.println();
+#endif
+  // Work phase
+  
+  static unsigned long long last = 0;
+  static unsigned long long last_micros = micros();
+  if((flags & 0b11) == 0b10) {
+    if(decoded < last) {
+      Serial.print("Counter roll-over in ");
+      unsigned long long now = micros();
+      Serial.println((unsigned long)(now - last_micros));
+      last_micros = now;
+    }
+    last = decoded;
+  }
+
+  if((flags & 0b11) == 0b10) {
+    Serial.print(" dec ");
+    Serial.print(decoded);
+    Serial.println();
+  }
+  
+  delay(5);
 }
