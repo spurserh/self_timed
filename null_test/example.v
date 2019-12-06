@@ -54,8 +54,8 @@ module top (
 	wire phase_finished = low_null_ready | high_null_ready | data_is_ready;
 
 	// HACK: Stop the optimizer from messing with these..
-	assign LED1 = combo_inputs[0];
-	assign LED2 = last_vals[0];
+	assign LED1 = last_vals[IN_BITS-3] & combo_inputs[0];
+	assign LED2 = last_vals[IN_BITS-1] & last_vals[0];
 
 	assign LED3 = high_null_ready;
 	assign LED4 = low_null_ready;
@@ -373,7 +373,7 @@ module inc_test(input [(IN_BITS-1):0] inputs,
 	wire [1:0] direct;
 
 	// Speed adjustment
-	localparam HIGH_SPEED = 1;
+	localparam HIGH_SPEED = 0;
 	assign outputs[47:46] = HIGH_SPEED ? direct : from_buffer;
 
 	SB_LUT4 #(
